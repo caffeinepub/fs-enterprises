@@ -3,18 +3,23 @@ import { useNavigate } from '@tanstack/react-router';
 import { useGetCart, useCalculateCartTotal } from '../hooks/useCart';
 import { useGetAllProducts } from '../hooks/useProducts';
 import { usePlaceOrder } from '../hooks/useOrders';
+import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { CheckCircle2, Loader2 } from 'lucide-react';
+import { CheckCircle2, Loader2, LogIn } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
+  const { identity } = useInternetIdentity();
   const { data: cart = [] } = useGetCart();
   const { data: products = [] } = useGetAllProducts();
   const { data: total = BigInt(0) } = useCalculateCartTotal();
   const placeOrder = usePlaceOrder();
   const [orderId, setOrderId] = useState<string | null>(null);
+
+  const isAuthenticated = !!identity && !identity.getPrincipal().isAnonymous();
 
   const cartWithProducts = cart
     .map((item) => ({
@@ -24,6 +29,11 @@ export default function CheckoutPage() {
     .filter((item) => item.product);
 
   const handlePlaceOrder = async () => {
+    if (!isAuthenticated) {
+      toast.error('Please log in to place an order');
+      return;
+    }
+
     try {
       const id = await placeOrder.mutateAsync();
       setOrderId(id);
@@ -108,16 +118,31 @@ export default function CheckoutPage() {
                 <span>Total</span>
                 <span className="text-amber-500">₹{Number(total).toLocaleString()}</span>
               </div>
+
+              {!isAuthenticated && (
+                <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 p-4 text-sm text-amber-700 dark:text-amber-400">
+                  <div className="flex items-start gap-2">
+                    <LogIn className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                    <p>Please log in to place your order</p>
+                  </div>
+                </div>
+              )}
+
               <Button
                 className="w-full smooth-transition hover-scale tap-scale hover-glow"
                 size="lg"
                 onClick={handlePlaceOrder}
-                disabled={placeOrder.isPending}
+                disabled={placeOrder.isPending || !isAuthenticated}
               >
                 {placeOrder.isPending ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Placing Order...
+                  </>
+                ) : !isAuthenticated ? (
+                  <>
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Log In to Place Order
                   </>
                 ) : (
                   'Place Order'

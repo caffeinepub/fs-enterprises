@@ -1,92 +1,70 @@
 {
   "kind": "build_request",
-  "title": "Add richer animations, Niraj-only site logo upload, and Admin Orders dashboard",
-  "priority": "normal",
+  "title": "Fix “User not registered” error during checkout/order placement",
+  "priority": "high",
   "requirements": [
     {
-      "id": "REQ-16",
-      "text": "Increase modern animations and micro-interactions across the website (Home, Catalog, Product Details, Cart, Checkout, About, Admin) by adding more visible motion such as section entrance animations, hover/tap feedback on cards/buttons, and subtle transitions for navigation and page content changes, while keeping performance smooth and consistent with the existing non-blue/purple theme.",
+      "id": "REQ-20",
+      "text": "Prevent unauthenticated users from attempting to place an order: on the Checkout page, if the user is not signed in with Internet Identity, block order placement and show a clear English message prompting the user to log in before placing an order.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-4"
         ],
         "quotes": [
-          "CAN YOU MAKE MORE ANIMATION IN WEBSITE ."
+          "WHILE PLACEING ORDER USER NOT REGSISER IS COMING?"
         ]
       },
       "acceptanceCriteria": [
-        "Key sections on major pages have noticeable entrance animations (e.g., fade/slide) that do not feel jittery.",
-        "Buttons/cards/navigation elements have consistent hover/focus/active micro-interactions (scale/translate/shadow) using existing Tailwind/utility patterns.",
-        "Animations do not block core interactions (e.g., add to cart, checkout) and remain usable on mobile."
+        "When not logged in, the Checkout page does not call the backend placeOrder method.",
+        "Clicking “Place Order” while logged out shows an English error message (e.g., “Please log in to place an order.”).",
+        "The UI remains stable (no console-only failures) when a logged-out user visits /checkout directly."
       ]
     },
     {
-      "id": "REQ-17",
-      "text": "Add backend support to store and serve a site logo image and allow only the admin (Niraj) to upload/replace it: implement a public query method to fetch the current logo and an admin-only update method to set/replace the logo using the existing Storage.ExternalBlob types and the existing admin authorization checks used for CEO photo/product CRUD.",
+      "id": "REQ-21",
+      "text": "Fix backend authorization so authenticated customers can place orders without seeing “user not registered”/authorization errors: ensure any authenticated (non-anonymous) caller is treated as a valid “user” for user-scoped methods used by checkout (getCart, calculateCartTotal, placeOrder, and related cart/order queries) while keeping admin-only protections unchanged.",
       "target": "backend",
       "source": {
         "messageIds": [
           "msg-4"
         ],
         "quotes": [
-          "AND ONE MORE THING AT LEFT TOP CORRER THERE IS WRITEN F S ENTERPRISES NO LOGO SO I WANT TO UPLOAD LOGO GIVE THIS ACCESS TO ONLY NIRAJ"
+          "WHILE PLACEING ORDER USER NOT REGSISER IS COMING?"
         ]
       },
       "acceptanceCriteria": [
-        "Backend exposes a query to retrieve the current logo (returns null/none when not set).",
-        "Backend exposes an admin-only method to update the logo; non-admin callers are rejected with a clear English error message.",
-        "Logo storage uses the same ExternalBlob mechanism already used for CEO photo, without introducing additional backend services."
+        "An authenticated non-admin user can successfully call getCart, calculateCartTotal, and placeOrder without receiving an authorization/registration error.",
+        "An unauthenticated (anonymous) caller is still rejected for user-scoped cart/order methods with a clear English error message.",
+        "Admin-only methods (e.g., getAllOrders, product CRUD, updateLogo, updateCeoPhoto) remain admin-gated and do not become accessible to normal users."
       ]
     },
     {
-      "id": "REQ-18",
-      "text": "Update the site header branding (top-left) to display the site logo when available (fetched from the backend); when no logo is set, fall back to the current header branding (icon + “FS Enterprises” text). Add a Niraj-admin-only UI to upload/replace the site logo (including preview and save) and persist it to the backend, using the existing admin gating approach used elsewhere in the app.",
+      "id": "REQ-22",
+      "text": "Improve order placement error UX: when placeOrder fails due to authorization/identity issues, display a friendly English toast message that explains the required action (log in / try again) instead of surfacing confusing “user not registered” wording.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-4"
         ],
         "quotes": [
-          "AT LEFT TOP CORRER THERE IS WRITEN F S ENTERPRISES NO LOGO SO I WANT TO UPLOAD LOGO GIVE THIS ACCESS TO ONLY NIRAJ"
+          "WHILE PLACEING ORDER USER NOT REGSISER IS COMING?"
         ]
       },
       "acceptanceCriteria": [
-        "Header shows the uploaded logo image when set; otherwise it shows the existing default branding.",
-        "Only admins (Niraj) can see and use the logo upload/replace UI; non-admin users never see upload controls.",
-        "Logo upload flow provides a preview and a success/error state; on success, the header updates to the new logo without a full reload."
-      ]
-    },
-    {
-      "id": "REQ-19",
-      "text": "Add an Admin dashboard option/page labeled “Orders” that is visible only to the admin (Niraj). The Orders view must list orders and clearly show who placed each order (at minimum the user principal; show the user’s saved profile name when available). Use the existing backend getAllOrders admin-only method and existing user profile retrieval to display user details.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "MAKE ONE OPTION AT DASHBOARD 'ORDERS ' WHERE ADMIN CAN SEE WHAT ARE ORDERS AND WHO HAS GIVE THAT ."
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admin navigation includes an “Orders” option within the Admin area (only visible when the caller is admin).",
-        "Orders page lists all orders returned by the backend (not just the current user’s orders).",
-        "Each order row/card shows: order id, total, items summary, and who placed it (principal; and profile name when available).",
-        "Non-admin users cannot access the Orders page and are shown the existing access denied behavior."
+        "If placeOrder fails due to missing authentication/permissions, the toast message is in English and instructive (no “user not registered” phrasing).",
+        "If placeOrder fails for other reasons (e.g., cart empty), the user sees an appropriate English error message."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single-actor Motoko canister (all logic in backend/main.mo).",
-    "Do not edit files under frontend immutablePaths (must compose existing UI components rather than modifying read-only sources).",
-    "Do not serve images through the backend as static files; use the existing ExternalBlob pattern for uploaded images (logo/CEO photo).",
-    "All user-facing text added/updated must be in English."
+    "Backend must remain single-actor; keep all Motoko logic in backend/main.mo.",
+    "Do not edit frontend immutable paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui."
   ],
   "nonGoals": [
-    "Adding third-party authentication providers or external storage/CDN for images.",
-    "Adding real-time order updates (no websockets/push).",
-    "Changing the checkout/order placement logic beyond what is needed to support admin order viewing UI."
+    "Adding new checkout fields (address, phone, payment integration).",
+    "Introducing third-party auth providers beyond Internet Identity.",
+    "Adding real-time order updates/notifications."
   ],
   "imageRequirements": {
     "required": [],

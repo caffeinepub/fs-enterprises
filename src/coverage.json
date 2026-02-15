@@ -1,116 +1,56 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T14:57:02.761Z",
+  "generatedAt": "2026-02-15T15:10:20.271Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 4,
-    "implemented": 3,
+    "total": 3,
+    "implemented": 2,
     "items": [
       {
-        "id": "REQ-16",
-        "summary": "Increase modern animations and micro-interactions across the website (Home, Catalog, Product Details, Cart, Checkout, About, Admin) by adding more visible motion such as section entrance animations, hover/tap feedback on cards/buttons, and subtle transitions for navigation and page content changes, while keeping performance smooth and consistent with the existing non-blue/purple theme.",
+        "id": "REQ-20",
+        "summary": "Prevent unauthenticated users from attempting to place an order: on the Checkout page, if the user is not signed in with Internet Identity, block order placement and show a clear English message prompting the user to log in before placing an order.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/index.css",
-          "frontend/src/components/AppLayout.tsx",
-          "frontend/src/components/SiteHeader.tsx",
-          "frontend/src/components/products/ProductCard.tsx",
-          "frontend/src/components/cart/CartLineItem.tsx",
-          "frontend/src/pages/CatalogPage.tsx",
-          "frontend/src/pages/ProductDetailsPage.tsx",
-          "frontend/src/pages/CartPage.tsx",
           "frontend/src/pages/CheckoutPage.tsx",
-          "frontend/src/pages/AboutPage.tsx",
-          "frontend/src/pages/AdminPage.tsx"
+          "frontend/src/pages/CheckoutPage.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/index.css",
-          "frontend/src/components/AppLayout.tsx",
-          "frontend/src/components/SiteHeader.tsx",
-          "frontend/src/components/products/ProductCard.tsx",
-          "frontend/src/components/cart/CartLineItem.tsx",
-          "frontend/src/pages/CatalogPage.tsx",
-          "frontend/src/pages/ProductDetailsPage.tsx",
-          "frontend/src/pages/CartPage.tsx",
           "frontend/src/pages/CheckoutPage.tsx",
-          "frontend/src/pages/AboutPage.tsx",
-          "frontend/src/pages/AdminPage.tsx"
+          "frontend/src/pages/CheckoutPage.tsx"
         ]
       },
       {
-        "id": "REQ-17",
-        "summary": "Add backend support to store and serve a site logo image and allow only the admin (Niraj) to upload/replace it: implement a public query method to fetch the current logo and an admin-only update method to set/replace the logo using the existing Storage.ExternalBlob types and the existing admin authorization checks used for CEO photo/product CRUD.",
+        "id": "REQ-21",
+        "summary": "Fix backend authorization so authenticated customers can place orders without seeing “user not registered”/authorization errors: ensure any authenticated (non-anonymous) caller is treated as a valid “user” for user-scoped methods used by checkout (getCart, calculateCartTotal, placeOrder, and related cart/order queries) while keeping admin-only protections unchanged.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-18",
-        "summary": "Update the site header branding (top-left) to display the site logo when available (fetched from the backend); when no logo is set, fall back to the current header branding (icon + “FS Enterprises” text). Add a Niraj-admin-only UI to upload/replace the site logo (including preview and save) and persist it to the backend, using the existing admin gating approach used elsewhere in the app.",
+        "id": "REQ-22",
+        "summary": "Improve order placement error UX: when placeOrder fails due to authorization/identity issues, display a friendly English toast message that explains the required action (log in / try again) instead of surfacing confusing “user not registered” wording.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useLogo.ts",
-          "frontend/src/components/admin/LogoUploadCard.tsx",
-          "frontend/src/pages/AdminPage.tsx",
-          "frontend/src/components/SiteHeader.tsx"
+          "frontend/src/hooks/useOrders.ts"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useLogo.ts",
-          "frontend/src/components/admin/LogoUploadCard.tsx",
-          "frontend/src/pages/AdminPage.tsx",
-          "frontend/src/components/SiteHeader.tsx"
-        ]
-      },
-      {
-        "id": "REQ-19",
-        "summary": "Add an Admin dashboard option/page labeled “Orders” that is visible only to the admin (Niraj). The Orders view must list orders and clearly show who placed each order (at minimum the user principal; show the user’s saved profile name when available). Use the existing backend getAllOrders admin-only method and existing user profile retrieval to display user details.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/hooks/useOrders.ts",
-          "frontend/src/pages/AdminOrdersPage.tsx",
-          "frontend/src/App.tsx",
-          "frontend/src/components/SiteHeader.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/hooks/useOrders.ts",
-          "frontend/src/pages/AdminOrdersPage.tsx",
-          "frontend/src/App.tsx",
-          "frontend/src/components/SiteHeader.tsx"
+          "frontend/src/hooks/useOrders.ts"
         ]
       }
     ]
   },
   "changedFiles": [
     "backend/main.mo",
-    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/App.tsx",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/components/AppLayout.tsx",
-    "frontend/src/components/SiteHeader.tsx",
-    "frontend/src/components/admin/LogoUploadCard.tsx",
-    "frontend/src/components/cart/CartLineItem.tsx",
-    "frontend/src/components/products/ProductCard.tsx",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useLogo.ts",
     "frontend/src/hooks/useOrders.ts",
-    "frontend/src/index.css",
-    "frontend/src/pages/AboutPage.tsx",
-    "frontend/src/pages/AdminOrdersPage.tsx",
-    "frontend/src/pages/AdminPage.tsx",
-    "frontend/src/pages/CartPage.tsx",
-    "frontend/src/pages/CatalogPage.tsx",
     "frontend/src/pages/CheckoutPage.tsx",
-    "frontend/src/pages/ProductDetailsPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

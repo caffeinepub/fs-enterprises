@@ -1,134 +1,41 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Richer UI animations, admin-only logo upload UI, and Admin Orders page",
+  "title": "Checkout auth guard + friendly order placement errors",
   "requirements": [
     {
-      "id": "REQ-16",
-      "summary": "Increase modern animations and consistent micro-interactions across major pages while keeping performance smooth and aligned with the existing amber/charcoal theme.",
+      "id": "REQ-20",
+      "summary": "Block order placement on Checkout when not authenticated with Internet Identity, and prompt user to log in.",
       "acceptanceCriteria": [
-        "Key sections on major pages have noticeable entrance animations (e.g., fade/slide) that do not feel jittery.",
-        "Buttons/cards/navigation elements have consistent hover/focus/active micro-interactions (scale/translate/shadow) using existing Tailwind/utility patterns.",
-        "Animations do not block core interactions (e.g., add to cart, checkout) and remain usable on mobile."
+        "When not logged in, the Checkout page does not call the backend placeOrder method.",
+        "Clicking “Place Order” while logged out shows an English error message (e.g., “Please log in to place an order.”).",
+        "The UI remains stable (no console-only failures) when a logged-out user visits /checkout directly."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/index.css",
+          "path": "frontend/src/pages/CheckoutPage.tsx",
           "operation": "modify",
-          "description": "Extend existing animation utilities to include a small set of reusable motion classes (e.g., consistent hover/tap micro-interactions, smoother transitions, and reduced-motion fallbacks via prefers-reduced-motion) so motion is consistent and performant site-wide."
-        },
-        {
-          "path": "frontend/src/components/AppLayout.tsx",
-          "operation": "modify",
-          "description": "Wrap main content with a lightweight page-content transition wrapper so route changes animate subtly without interfering with scrolling or interactions."
-        },
-        {
-          "path": "frontend/src/components/SiteHeader.tsx",
-          "operation": "modify",
-          "description": "Apply consistent navigation/branding micro-interactions (hover/active feedback and smooth transitions) for both desktop and mobile menu elements while preserving the current non-blue/purple theme."
-        },
-        {
-          "path": "frontend/src/components/products/ProductCard.tsx",
-          "operation": "modify",
-          "description": "Enhance product card motion (hover elevation/scale, image subtle zoom, and focus-visible cues) using the shared utility patterns to make catalog browsing feel more modern."
-        },
-        {
-          "path": "frontend/src/components/cart/CartLineItem.tsx",
-          "operation": "modify",
-          "description": "Add subtle entrance and interaction transitions (e.g., hover elevation and button tap feedback) to cart line items without impacting quantity edits or remove actions."
-        },
-        {
-          "path": "frontend/src/pages/CatalogPage.tsx",
-          "operation": "modify",
-          "description": "Add section-level entrance animations for the catalog header/filter area and ensure loading/empty states remain readable and responsive on mobile."
-        },
-        {
-          "path": "frontend/src/pages/ProductDetailsPage.tsx",
-          "operation": "modify",
-          "description": "Polish product details transitions (image/content entrance, button hover/tap feedback) while keeping add-to-cart flow fully usable."
-        },
-        {
-          "path": "frontend/src/pages/CartPage.tsx",
-          "operation": "modify",
-          "description": "Add subtle motion for cart header/summary card and checkout CTA micro-interactions consistent with the rest of the site."
+          "description": "Add an Internet Identity authentication guard on the Checkout page: detect logged-out state via useInternetIdentity, prevent calling usePlaceOrder().mutateAsync when unauthenticated, disable or gate the “Place Order” button, and show a clear English message prompting login (inline and/or toast). Ensure direct navigation to /checkout while logged out renders a stable view (no crashes/uncaught errors). Use the authorization component’s frontend auth guidance for determining authenticated vs guest behavior; verify the component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/pages/CheckoutPage.tsx",
           "operation": "modify",
-          "description": "Add gentle entrance motion to checkout sections and maintain clear pending/success UI states with smooth but non-blocking transitions."
-        },
-        {
-          "path": "frontend/src/pages/AboutPage.tsx",
-          "operation": "modify",
-          "description": "Align About page cards/sections with the shared motion system so entrance animations and hover effects feel consistent across the website."
-        },
-        {
-          "path": "frontend/src/pages/AdminPage.tsx",
-          "operation": "modify",
-          "description": "Apply the shared micro-interaction patterns to the Admin UI (buttons/dialog triggers/sections) to match the rest of the site’s motion style."
+          "description": "Adjust order placement handler to avoid console-only failure UX: rely on user-facing messaging for auth failures and keep error handling graceful (no leaking confusing backend wording). Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-18",
-      "summary": "Show the site logo in the header when available and add a Niraj-admin-only UI to upload/replace the logo with preview and live header update.",
+      "id": "REQ-22",
+      "summary": "Show friendly English toasts for placeOrder authorization/identity failures, avoiding “user not registered” wording.",
       "acceptanceCriteria": [
-        "Header shows the uploaded logo image when set; otherwise it shows the existing default branding.",
-        "Only admins (Niraj) can see and use the logo upload/replace UI; non-admin users never see upload controls.",
-        "Logo upload flow provides a preview and a success/error state; on success, the header updates to the new logo without a full reload."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/hooks/useLogo.ts",
-          "operation": "create",
-          "description": "Create React Query hooks to fetch and update the site logo via backend actor methods (getLogo/updateLogo), including cache invalidation so the header can update immediately after a successful save. Use the blob-storage ExternalBlob type for uploads. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/admin/LogoUploadCard.tsx",
-          "operation": "create",
-          "description": "Add an admin-only logo upload/replace UI with preview, upload progress, and English success/error states. Reuse existing patterns from CEO photo/product image uploads and use the blob-storage ExternalBlob upload flow. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/AdminPage.tsx",
-          "operation": "modify",
-          "description": "Wire the new LogoUploadCard into the existing Admin page (dashboard) and gate visibility using the same admin-only approach already used in the app so only Niraj/admin sees upload controls. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/SiteHeader.tsx",
-          "operation": "modify",
-          "description": "Fetch and display the logo in the top-left branding using the new useLogo hook; when no logo is set, fall back to the current wrench icon + “FS Enterprises” text. Use the ExternalBlob direct URL for display and ensure the logo updates after a successful upload without a full reload. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-19",
-      "summary": "Add an admin-only “Orders” option/page that lists all orders and shows who placed them (principal and profile name when available).",
-      "acceptanceCriteria": [
-        "Admin navigation includes an “Orders” option within the Admin area (only visible when the caller is admin).",
-        "Orders page lists all orders returned by the backend (not just the current user’s orders).",
-        "Each order row/card shows: order id, total, items summary, and who placed it (principal; and profile name when available).",
-        "Non-admin users cannot access the Orders page and are shown the existing access denied behavior."
+        "If placeOrder fails due to missing authentication/permissions, the toast message is in English and instructive (no “user not registered” phrasing).",
+        "If placeOrder fails for other reasons (e.g., cart empty), the user sees an appropriate English error message."
       ],
       "file_operations": [
         {
           "path": "frontend/src/hooks/useOrders.ts",
           "operation": "modify",
-          "description": "Add an admin-oriented query hook for retrieving all orders (using the existing backend getAllOrders capability) with appropriate React Query caching and error handling consistent with the app."
-        },
-        {
-          "path": "frontend/src/pages/AdminOrdersPage.tsx",
-          "operation": "create",
-          "description": "Create an Admin Orders page that (1) lists all orders, (2) displays order id, total, and items summary, and (3) shows who placed the order by principal plus profile name when available via user profile retrieval. Ensure all added user-facing text is in English."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Register a new admin-only route for the Orders page (e.g., within /admin area) wrapped in the existing ProtectedAdminRoute so non-admin users see the current access denied behavior."
-        },
-        {
-          "path": "frontend/src/components/SiteHeader.tsx",
-          "operation": "modify",
-          "description": "Add an “Orders” navigation link within the Admin area navigation that is only visible when the caller is admin, matching existing admin-link gating."
+          "description": "Improve placeOrder error handling: detect authorization/identity-related failures (e.g., anonymous/unauthorized, or messages containing “user not registered”) and map them to a friendly English toast such as “Please log in to place an order.” For non-auth failures, map to an appropriate English message (e.g., empty cart). Keep existing success invalidations/toasts. Use the authorization component’s error-handling guidance to treat backend traps gracefully; verify the component's usage instructions before implementing."
         }
       ]
     }

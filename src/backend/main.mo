@@ -3,17 +3,14 @@ import List "mo:core/List";
 import Text "mo:core/Text";
 import Principal "mo:core/Principal";
 import Iter "mo:core/Iter";
-import Order "mo:core/Order";
 import Array "mo:core/Array";
+import Order "mo:core/Order";
 import Runtime "mo:core/Runtime";
-
 import MixinStorage "blob-storage/Mixin";
 import Storage "blob-storage/Storage";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
-import Migration "migration";
 
-(with migration = Migration.run)
 actor {
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
@@ -61,9 +58,17 @@ actor {
   let orderStore = Map.empty<Text, Order>();
   let userProfiles = Map.empty<Principal, UserProfile>();
 
-  // CEO Photo (Only Admin - Niraj)
   var ceoPhoto : ?Storage.ExternalBlob = null;
+  var logo : ?Storage.ExternalBlob = null;
 
+  // Helper to check if caller is valid non-anonymous user
+  func assertAuthenticatedUser(caller : Principal) : () {
+    if (caller.isAnonymous()) {
+      Runtime.trap("Only authenticated users can use this feature");
+    };
+  };
+
+  // CEO Photo (Only Admin - Niraj)
   public query ({ caller }) func getCeoPhoto() : async ?Storage.ExternalBlob {
     ceoPhoto;
   };
@@ -76,8 +81,6 @@ actor {
   };
 
   // Website Logo (Only Admin - Niraj)
-  var logo : ?Storage.ExternalBlob = null;
-
   public query ({ caller }) func getLogo() : async ?Storage.ExternalBlob {
     logo;
   };
@@ -91,9 +94,7 @@ actor {
 
   // User Profile Management
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can save profiles");
-    };
+    assertAuthenticatedUser(caller);
     userProfiles.get(caller);
   };
 
@@ -105,9 +106,7 @@ actor {
   };
 
   public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can save profiles");
-    };
+    assertAuthenticatedUser(caller);
     userProfiles.add(caller, profile);
   };
 
@@ -162,11 +161,9 @@ actor {
     };
   };
 
-  // Cart Management (User Only)
+  // Cart Management (Authenticated Only)
   public query ({ caller }) func getCart() : async [CartItem] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can access carts");
-    };
+    assertAuthenticatedUser(caller);
     switch (cartStore.get(caller)) {
       case (?items) { items };
       case (null) { [] };
@@ -174,9 +171,7 @@ actor {
   };
 
   public shared ({ caller }) func addToCart(productId : Text, quantity : Nat) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can add to cart");
-    };
+    assertAuthenticatedUser(caller);
     switch (productStore.get(productId)) {
       case (null) { Runtime.trap("Product not found") };
       case (?_) {
@@ -212,9 +207,7 @@ actor {
   };
 
   public shared ({ caller }) func updateCartItem(productId : Text, quantity : Nat) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can update cart items");
-    };
+    assertAuthenticatedUser(caller);
     let currentCart = switch (cartStore.get(caller)) {
       case (?items) { items };
       case (null) { Runtime.trap("Cart is empty") };
@@ -240,9 +233,7 @@ actor {
   };
 
   public shared ({ caller }) func removeFromCart(productId : Text) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can remove from cart");
-    };
+    assertAuthenticatedUser(caller);
     let currentCart = switch (cartStore.get(caller)) {
       case (?items) { items };
       case (null) { Runtime.trap("Cart is empty") };
@@ -255,9 +246,7 @@ actor {
   };
 
   public shared ({ caller }) func calculateCartTotal() : async Nat {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can calculate cart total");
-    };
+    assertAuthenticatedUser(caller);
     let currentCart = switch (cartStore.get(caller)) {
       case (?items) { items };
       case (null) { [] };
@@ -277,17 +266,13 @@ actor {
   };
 
   public shared ({ caller }) func clearCart() : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can clear cart");
-    };
+    assertAuthenticatedUser(caller);
     cartStore.add(caller, []);
   };
 
-  // Order Management (User Only)
+  // Order Management (Authenticated Only)
   public shared ({ caller }) func placeOrder() : async Text {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can place order");
-    };
+    assertAuthenticatedUser(caller);
     let items = switch (cartStore.get(caller)) {
       case (?cartItems) { cartItems };
       case (null) { [] };
@@ -303,9 +288,7 @@ actor {
   };
 
   public query ({ caller }) func getOrder(orderId : Text) : async ?Order {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can get orders");
-    };
+    assertAuthenticatedUser(caller);
     switch (orderStore.get(orderId)) {
       case (?order) {
         if (order.user == caller or AccessControl.isAdmin(accessControlState, caller)) {
@@ -319,9 +302,7 @@ actor {
   };
 
   public query ({ caller }) func getUserOrders() : async [Order] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can get orders");
-    };
+    assertAuthenticatedUser(caller);
     orderStore.values().toArray().filter<Order>(
       func(order) { order.user == caller },
     );

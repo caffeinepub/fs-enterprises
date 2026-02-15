@@ -1,14 +1,16 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 9,
+  "projectStateVersion": 11,
   "summary": "Marketing website/app for FS Enterprises featuring a product catalog (hardware & power tools), user login, shopping cart and ordering, admin product management, admin order viewing, and admin-managed branding assets (CEO photo + site logo), with modern animated UI and an About section highlighting CEO Chandrashekar Dhone and shop details.",
   "architectural_notes": [
     "Admin area must be protected by an allowlist so only Niraj’s authenticated identity/principal can access admin features (not just any logged-in user).",
     "CEO photo for About page should be stored/managed in the backend (not only as a static asset) and editable only by the single admin (Niraj).",
     "Site logo should be stored/managed in the backend (not only as a static asset) and editable only by the single admin (Niraj)."
   ],
-  "known_issues": [],
-  "isFixRequest": false,
+  "known_issues": [
+    "Bug: During order placement/checkout, user sees a \"user not registered\" message/error (unexpected for intended flow)."
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-create-a-responsive-marketing-website-app-for-the-business-name-fs-enterprises-with-core-pages-home-catalog-product-details-cart-checkout-order-about-and-admin-protected",
@@ -121,6 +123,22 @@
         "REQ-19"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-prevent-unauthenticated-users-from-attempting-to-place-an-order-on-the-checkout-page-if-the-user-is-not-signed-in-with-internet-identity-block-order-placement-and-show-a-clear-english-message-prompting-the-user-to-log-in-before-placing-an-order",
+      "title": "Prevent unauthenticated users from attempting to place an order: on the Checkout page, if the user is not signed in with Internet Identity, block order placement and show a clear English message prompting the user to log in before placing an order.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-order-placement-error-ux-when-placeorder-fails-due-to-authorization-identity-issues-display-a-friendly-english-toast-message-that-explains-the-required-action-log-in-try-again-instead-of-surfacing-confusing-user-not-registered-wording",
+      "title": "Improve order placement error UX: when placeOrder fails due to authorization/identity issues, display a friendly English toast message that explains the required action (log in / try again) instead of surfacing confusing “user not registered” wording.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -227,6 +245,14 @@
       "summary": "Add backend support to store and serve a site logo image and allow only the admin (Niraj) to upload/replace it: implement a public query method to fetch the current logo and an admin-only update method to set/replace the logo using the existing Storage.ExternalBlob types and the existing admin authorization checks used for CEO photo/product CRUD.",
       "reqIds": [
         "REQ-17"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Fix backend authorization so authenticated customers can place orders without seeing “user not registered”/authorization errors: ensure any authenticated (non-anonymous) caller is treated as a valid “user” for user-scoped methods used by checkout (getCart, calculateCartTotal, placeOrder, and related cart/order queries) while keeping admin-only protections unchanged.",
+      "reqIds": [
+        "REQ-21"
       ],
       "status": "pending"
     }
