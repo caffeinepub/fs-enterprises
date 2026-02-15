@@ -1,0 +1,95 @@
+{
+  "kind": "build_request",
+  "title": "Add richer animations, Niraj-only site logo upload, and Admin Orders dashboard",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-16",
+      "text": "Increase modern animations and micro-interactions across the website (Home, Catalog, Product Details, Cart, Checkout, About, Admin) by adding more visible motion such as section entrance animations, hover/tap feedback on cards/buttons, and subtle transitions for navigation and page content changes, while keeping performance smooth and consistent with the existing non-blue/purple theme.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "CAN YOU MAKE MORE ANIMATION IN WEBSITE ."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Key sections on major pages have noticeable entrance animations (e.g., fade/slide) that do not feel jittery.",
+        "Buttons/cards/navigation elements have consistent hover/focus/active micro-interactions (scale/translate/shadow) using existing Tailwind/utility patterns.",
+        "Animations do not block core interactions (e.g., add to cart, checkout) and remain usable on mobile."
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "text": "Add backend support to store and serve a site logo image and allow only the admin (Niraj) to upload/replace it: implement a public query method to fetch the current logo and an admin-only update method to set/replace the logo using the existing Storage.ExternalBlob types and the existing admin authorization checks used for CEO photo/product CRUD.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "AND ONE MORE THING AT LEFT TOP CORRER THERE IS WRITEN F S ENTERPRISES NO LOGO SO I WANT TO UPLOAD LOGO GIVE THIS ACCESS TO ONLY NIRAJ"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes a query to retrieve the current logo (returns null/none when not set).",
+        "Backend exposes an admin-only method to update the logo; non-admin callers are rejected with a clear English error message.",
+        "Logo storage uses the same ExternalBlob mechanism already used for CEO photo, without introducing additional backend services."
+      ]
+    },
+    {
+      "id": "REQ-18",
+      "text": "Update the site header branding (top-left) to display the site logo when available (fetched from the backend); when no logo is set, fall back to the current header branding (icon + “FS Enterprises” text). Add a Niraj-admin-only UI to upload/replace the site logo (including preview and save) and persist it to the backend, using the existing admin gating approach used elsewhere in the app.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "AT LEFT TOP CORRER THERE IS WRITEN F S ENTERPRISES NO LOGO SO I WANT TO UPLOAD LOGO GIVE THIS ACCESS TO ONLY NIRAJ"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Header shows the uploaded logo image when set; otherwise it shows the existing default branding.",
+        "Only admins (Niraj) can see and use the logo upload/replace UI; non-admin users never see upload controls.",
+        "Logo upload flow provides a preview and a success/error state; on success, the header updates to the new logo without a full reload."
+      ]
+    },
+    {
+      "id": "REQ-19",
+      "text": "Add an Admin dashboard option/page labeled “Orders” that is visible only to the admin (Niraj). The Orders view must list orders and clearly show who placed each order (at minimum the user principal; show the user’s saved profile name when available). Use the existing backend getAllOrders admin-only method and existing user profile retrieval to display user details.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "MAKE ONE OPTION AT DASHBOARD 'ORDERS ' WHERE ADMIN CAN SEE WHAT ARE ORDERS AND WHO HAS GIVE THAT ."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin navigation includes an “Orders” option within the Admin area (only visible when the caller is admin).",
+        "Orders page lists all orders returned by the backend (not just the current user’s orders).",
+        "Each order row/card shows: order id, total, items summary, and who placed it (principal; and profile name when available).",
+        "Non-admin users cannot access the Orders page and are shown the existing access denied behavior."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single-actor Motoko canister (all logic in backend/main.mo).",
+    "Do not edit files under frontend immutablePaths (must compose existing UI components rather than modifying read-only sources).",
+    "Do not serve images through the backend as static files; use the existing ExternalBlob pattern for uploaded images (logo/CEO photo).",
+    "All user-facing text added/updated must be in English."
+  ],
+  "nonGoals": [
+    "Adding third-party authentication providers or external storage/CDN for images.",
+    "Adding real-time order updates (no websockets/push).",
+    "Changing the checkout/order placement logic beyond what is needed to support admin order viewing UI."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

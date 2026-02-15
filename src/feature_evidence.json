@@ -1,0 +1,81 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-increase-modern-animations-and-micro-interactions-across-the-website-home-catalog-product-details-cart-checkout-about-admin-by-adding-more-visible-motion-such-as-section-entrance-animations-hover-tap-feedback-on-cards-buttons-and-subtle-transitions-for-navigation-and-page-content-changes-while-keeping-performance-smooth-and-consistent-with-the-existing-non-blue-purple-theme",
+      "featureTitle": "Increase modern animations and micro-interactions across the website (Home, Catalog, Product Details, Cart, Checkout, About, Admin) by adding more visible motion such as section entrance animations, hover/tap feedback on cards/buttons, and subtle transitions for navigation and page content changes, while keeping performance smooth and consistent with the existing non-blue/purple theme.",
+      "files": [
+        "frontend/src/components/AppLayout.tsx",
+        "frontend/src/components/SiteHeader.tsx",
+        "frontend/src/components/cart/CartLineItem.tsx",
+        "frontend/src/components/products/ProductCard.tsx",
+        "frontend/src/index.css",
+        "frontend/src/pages/AboutPage.tsx",
+        "frontend/src/pages/AdminPage.tsx",
+        "frontend/src/pages/CartPage.tsx",
+        "frontend/src/pages/CatalogPage.tsx",
+        "frontend/src/pages/CheckoutPage.tsx",
+        "frontend/src/pages/ProductDetailsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-site-header-branding-top-left-to-display-the-site-logo-when-available-fetched-from-the-backend-when-no-logo-is-set-fall-back-to-the-current-header-branding-icon-fs-enterprises-text-add-a-niraj-admin-only-ui-to-upload-replace-the-site-logo-including-preview-and-save-and-persist-it-to-the-backend-using-the-existing-admin-gating-approach-used-elsewhere-in-the-app",
+      "featureTitle": "Update the site header branding (top-left) to display the site logo when available (fetched from the backend); when no logo is set, fall back to the current header branding (icon + “FS Enterprises” text). Add a Niraj-admin-only UI to upload/replace the site logo (including preview and save) and persist it to the backend, using the existing admin gating approach used elsewhere in the app.",
+      "files": [
+        "frontend/src/components/SiteHeader.tsx",
+        "frontend/src/components/admin/LogoUploadCard.tsx",
+        "frontend/src/hooks/useLogo.ts",
+        "frontend/src/pages/AdminPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-18"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-an-admin-dashboard-option-page-labeled-orders-that-is-visible-only-to-the-admin-niraj-the-orders-view-must-list-orders-and-clearly-show-who-placed-each-order-at-minimum-the-user-principal-show-the-user-s-saved-profile-name-when-available-use-the-existing-backend-getallorders-admin-only-method-and-existing-user-profile-retrieval-to-display-user-details",
+      "featureTitle": "Add an Admin dashboard option/page labeled “Orders” that is visible only to the admin (Niraj). The Orders view must list orders and clearly show who placed each order (at minimum the user principal; show the user’s saved profile name when available). Use the existing backend getAllOrders admin-only method and existing user profile retrieval to display user details.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/SiteHeader.tsx",
+        "frontend/src/hooks/useOrders.ts",
+        "frontend/src/pages/AdminOrdersPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-19"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

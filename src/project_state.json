@@ -1,0 +1,238 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 9,
+  "summary": "Marketing website/app for FS Enterprises featuring a product catalog (hardware & power tools), user login, shopping cart and ordering, admin product management, admin order viewing, and admin-managed branding assets (CEO photo + site logo), with modern animated UI and an About section highlighting CEO Chandrashekar Dhone and shop details.",
+  "architectural_notes": [
+    "Admin area must be protected by an allowlist so only Niraj’s authenticated identity/principal can access admin features (not just any logged-in user).",
+    "CEO photo for About page should be stored/managed in the backend (not only as a static asset) and editable only by the single admin (Niraj).",
+    "Site logo should be stored/managed in the backend (not only as a static asset) and editable only by the single admin (Niraj)."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-a-responsive-marketing-website-app-for-the-business-name-fs-enterprises-with-core-pages-home-catalog-product-details-cart-checkout-order-about-and-admin-protected",
+      "title": "Create a responsive marketing website/app for the business name “FS Enterprises” with core pages: Home, Catalog, Product Details, Cart, Checkout/Order, About, and Admin (protected).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-user-authentication-using-internet-identity-and-expose-login-logout-ui-states-in-the-frontend",
+      "title": "Implement user authentication using Internet Identity and expose login/logout UI states in the frontend.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-product-catalog-for-hardware-and-power-tools-with-product-fields-category-name-size-quantity-image-and-product-information-description",
+      "title": "Implement a product catalog for hardware and power tools with product fields: category, name, size, quantity, image, and product information/description.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-admin-product-management-crud-allow-an-authorized-admin-to-add-edit-and-delete-products-including-uploading-setting-a-product-image",
+      "title": "Add admin product management (CRUD): allow an authorized admin to add, edit, and delete products, including uploading/setting a product image.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-add-to-cart-cart-management-update-quantities-remove-items-and-an-order-placement-flow-that-creates-an-order-record-in-the-backend",
+      "title": "Implement add-to-cart, cart management (update quantities/remove items), and an order placement flow that creates an order record in the backend.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-an-about-page-that-includes-ceo-name-chandrashekar-dhone-a-ceo-image-and-shop-details-text-including-best-industrial-supplies-in-pcmc-presented-with-modern-animation",
+      "title": "Create an About page that includes CEO name “Chandrashekar Dhone”, a CEO image, and shop details text including: “best industrial supplies in PCMC”, presented with modern animation.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-coherent-modern-visual-theme-not-blue-purple-with-consistent-typography-spacing-and-modern-animation-and-colors-across-the-site-including-subtle-micro-interactions-for-buttons-cards",
+      "title": "Apply a coherent modern visual theme (NOT blue/purple) with consistent typography, spacing, and “modern animation and colors” across the site, including subtle micro-interactions for buttons/cards.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-required-static-images-and-wire-them-into-the-frontend-as-static-assets-under-frontend-public-assets-generated-do-not-serve-images-through-the-backend",
+      "title": "Generate required static images and wire them into the frontend as static assets under frontend/public/assets/generated (do not serve images through the backend).",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-frontend-admin-access-ux-to-reflect-the-single-admin-niraj-only-restriction-ensure-the-admin-navigation-link-only-appears-for-users-whose-role-is-admin-and-update-the-access-denied-messaging-for-authenticated-users-to-clearly-state-that-only-niraj-has-admin-access",
+      "title": "Update the frontend admin-access UX to reflect the single-admin (Niraj-only) restriction: ensure the Admin navigation link only appears for users whose role is admin, and update the access denied messaging for authenticated users to clearly state that only Niraj has admin access.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-about-page-to-display-the-ceo-photo-from-the-backend-when-available-if-the-backend-has-no-ceo-photo-set-fall-back-to-the-existing-static-ceo-image-currently-used-on-the-about-page",
+      "title": "Update the About page to display the CEO photo from the backend when available; if the backend has no CEO photo set, fall back to the existing static CEO image currently used on the About page.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-niraj-admin-only-ui-on-the-about-page-to-upload-replace-the-ceo-photo-and-save-it-to-the-backend",
+      "title": "Add a Niraj-admin-only UI on the About page to upload/replace the CEO photo and save it to the backend.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-increase-modern-animations-and-micro-interactions-across-the-website-home-catalog-product-details-cart-checkout-about-admin-by-adding-more-visible-motion-such-as-section-entrance-animations-hover-tap-feedback-on-cards-buttons-and-subtle-transitions-for-navigation-and-page-content-changes-while-keeping-performance-smooth-and-consistent-with-the-existing-non-blue-purple-theme",
+      "title": "Increase modern animations and micro-interactions across the website (Home, Catalog, Product Details, Cart, Checkout, About, Admin) by adding more visible motion such as section entrance animations, hover/tap feedback on cards/buttons, and subtle transitions for navigation and page content changes, while keeping performance smooth and consistent with the existing non-blue/purple theme.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-site-header-branding-top-left-to-display-the-site-logo-when-available-fetched-from-the-backend-when-no-logo-is-set-fall-back-to-the-current-header-branding-icon-fs-enterprises-text-add-a-niraj-admin-only-ui-to-upload-replace-the-site-logo-including-preview-and-save-and-persist-it-to-the-backend-using-the-existing-admin-gating-approach-used-elsewhere-in-the-app",
+      "title": "Update the site header branding (top-left) to display the site logo when available (fetched from the backend); when no logo is set, fall back to the current header branding (icon + “FS Enterprises” text). Add a Niraj-admin-only UI to upload/replace the site logo (including preview and save) and persist it to the backend, using the existing admin gating approach used elsewhere in the app.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-admin-dashboard-option-page-labeled-orders-that-is-visible-only-to-the-admin-niraj-the-orders-view-must-list-orders-and-clearly-show-who-placed-each-order-at-minimum-the-user-principal-show-the-user-s-saved-profile-name-when-available-use-the-existing-backend-getallorders-admin-only-method-and-existing-user-profile-retrieval-to-display-user-details",
+      "title": "Add an Admin dashboard option/page labeled “Orders” that is visible only to the admin (Niraj). The Orders view must list orders and clearly show who placed each order (at minimum the user principal; show the user’s saved profile name when available). Use the existing backend getAllOrders admin-only method and existing user profile retrieval to display user details.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create marketing website/app for business \"FS Enterprises\" with modern look, colors, and animations",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Product catalog for hardware & power tools with categories and product fields (category, name, size, quantity, image, information)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Shopping cart and ordering/checkout flow for customers",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Admin capability to add/edit/delete products (product management CRUD)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "User authentication/login",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "About page with CEO name (Chandrashekar Dhone), CEO image, and shop details (\"best industrial supplies in PCMC\") with animation",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Restrict Admin access so only Niraj has Admin privileges (admin-only authorization)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Update backend authorization so that admin privileges are granted to exactly one Internet Identity principal (Niraj) and no other principals can be treated as admin. Implement a backend-controlled way to set/replace the single admin principal (Niraj) and persist it across upgrades, and ensure all admin-protected methods (product CRUD and viewing all orders) enforce this single-admin rule.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Allow Niraj-only (single admin) backend-managed upload/update of the About page CEO photo so it can be changed anytime",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Add backend support to store the About page CEO photo in canister state using the existing blob storage types, so the CEO photo can be changed any time without redeploying frontend assets.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Restrict CEO photo update capability to the single admin (Niraj) using the existing backend authorization system; non-admin callers must be rejected with an English error message.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "If adding new persistent backend state for the CEO photo requires a state schema change, implement an upgrade-safe migration according to the project’s conditional migration policy.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Increase/expand animations across the website (more modern motion/interactive animations)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Add a top-left site logo and provide a Niraj-only admin capability to upload/replace the logo (not editable by other users)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Add an Admin dashboard 'Orders' option/page where Niraj can view orders and who placed them (customer identity/details)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Add backend support to store and serve a site logo image and allow only the admin (Niraj) to upload/replace it: implement a public query method to fetch the current logo and an admin-only update method to set/replace the logo using the existing Storage.ExternalBlob types and the existing admin authorization checks used for CEO photo/product CRUD.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "FS Enterprises",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
